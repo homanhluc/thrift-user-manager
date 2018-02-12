@@ -12,6 +12,7 @@ import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import vng.luchm.controller.Login;
 import vng.luchm.controller.Register;
+import vng.luchm.controller.SetScore;
 
 /**
  *
@@ -39,7 +40,7 @@ public class JettyServer {
 
         servletHandler.addServletWithMapping(Register.class, "/register");
         servletHandler.addServletWithMapping(Login.class, "/login");
-        servletHandler.addServletWithMapping(Login.class, "/score");
+        servletHandler.addServletWithMapping(SetScore.class, "/score");
 
         server.start();
 

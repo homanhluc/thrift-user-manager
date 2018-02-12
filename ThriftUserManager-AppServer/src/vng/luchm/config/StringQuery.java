@@ -24,4 +24,25 @@ public class StringQuery {
                     + "'" + u.getUpdatedDate() + "'" + ")";
         return query;
     }
+    public static String checkLogin(String username, String password) {
+        String query = "SELECT Id FROM "
+                + TABLE
+                + " WHERE UserName = " + "'" + username + "'"
+                + " && PassWord = " + "'" + password + "'";
+        return query;
+    }
+    public static String getUser(String id) {
+        String query = "SELECT * FROM "
+                + TABLE
+                + " WHERE Id = " + "'" + id + "'";
+        return query;
+    }
+    public static String increase(String id) {
+        String query = "UPDATE usermanager.user SET Score = Score + 1 WHERE Id = " + id;
+        return query;
+    }
+    public static String decrease(String id) {
+        String query = "UPDATE usermanager.user SET Score = Score - 1 WHERE Id = " + id;
+        return query;
+    }
 }

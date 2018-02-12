@@ -5,16 +5,13 @@
  */
 package vng.luchm.main;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.thrift.TException;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TThreadPoolServer;
+//import org.apache.thrift.server.TNonblockingServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransportException;
 import vng.luchm.handler.UserManagerServiceHandler;
-import vng.luchm.thrift.User;
 import vng.luchm.thrift.UserManagerService;
 
 /**
@@ -39,9 +36,11 @@ public class AppServerMain {
         try {
             final TServerTransport serverTransport = new TServerSocket(9000);
             final TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor).maxWorkerThreads(1000));
+            
             System.out.println("Starting the thread pool server...");
    
             server.serve();
+            
         } catch (TTransportException ex) {
             ex.printStackTrace();
         }

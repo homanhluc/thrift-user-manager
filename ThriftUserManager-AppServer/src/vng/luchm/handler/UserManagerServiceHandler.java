@@ -23,12 +23,14 @@ import vng.luchm.thrift.UserNotFound;
 public class UserManagerServiceHandler implements UserManagerService.Iface {
     final UserRepositoryMySQLImp uri = new UserRepositoryMySQLImp();
     @Override
-    public void setScore(Operation op) throws TException {
+    public void setScore(Operation op, String id) throws TException {
         switch (op) {
             case INCREASE:
-                uri.increase();
+                uri.increase(id);
+                break;
             case DECREASE:
-                uri.decrease();
+                uri.decrease(id);
+                break;
             default:
                 throw new TException("Unknown operation " + op);
         }

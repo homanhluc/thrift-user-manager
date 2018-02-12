@@ -21,7 +21,7 @@ exception LoginFailed {
   1: string message
 }
 service UserManagerService {
-    void setScore(1:Operation op),
+    void setScore(1:Operation op, 2:string id),
     void userRegister(1:User userInfo) throws (1: RegisterFailed rf),
     void userlogin(1:string userName, 2:string passWord) throws (1: LoginFailed lf),
     list<User> getAllUsers(),

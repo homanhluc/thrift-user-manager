@@ -5,22 +5,12 @@
  */
 package vng.luchm.repository;
 
-import com.google.gson.Gson;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.bson.Document;
-import vng.luchm.config.ConnectionPool;
 import vng.luchm.config.StringQuery;
-import vng.luchm.config.SystemInfo;
 import vng.luchm.pool.DataSource;
 import vng.luchm.thrift.User;
 
@@ -30,50 +20,104 @@ import vng.luchm.thrift.User;
  */
 public class UserRepositoryMySQLImp implements IUserRepository {
 
+    private Connection connect;
+    private Statement statement;
+    private ResultSet resultset;
+
     @Override
     public void userRegister(User u) {
-        Connection connect = null;
-        Statement statement = null;
-        ResultSet resultset = null;
-        
         try {
             connect = DataSource.getConnection();
             statement = connect.createStatement();
-            int addData = statement.executeUpdate(StringQuery.insert(u));
-            if(addData < 1) {
-                System.out.println("khong them duoc");
+            statement.executeUpdate(StringQuery.insert(u));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } finally {
+            DataSource.returnConnection(connect);
+        }
+    }
+
+    @Override
+    public void userlogin(String userName, String passWord) {
+        try {
+            User u = new User();
+            connect = DataSource.getConnection();
+            statement = connect.createStatement();
+            resultset = statement.executeQuery(StringQuery.checkLogin(userName, passWord));
+            while (resultset.next()) {
+                u.setId(resultset.getString("Id"));
+            }
+            getUserById(u.getId());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } finally {
+            DataSource.returnConnection(connect);
+        }
+    }
+
+    @Override
+    public User getUserById(String id) {
+
+        User u = new User();
+        try {
+            connect = DataSource.getConnection();
+            statement = connect.createStatement();
+            resultset = statement.executeQuery(StringQuery.getUser(id));
+            while (resultset.next()) {
+                u.setId(resultset.getString("Id"));
+                u.setUserName(resultset.getString("UserName"));
+                u.setPassWord(resultset.getString("PassWord"));
+                u.setScore(resultset.getInt("Score"));
+                u.setCreatedDate(resultset.getString("CreatedDate"));
+                u.setUpdatedDate(resultset.getString("updatedDate"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         } finally {
-            DataSource.closeConnection(resultset, statement, connect);
+            DataSource.returnConnection(connect);
         }
-    }
-
-    @Override
-    public void increase() {
-
-    }
-
-    @Override
-    public void decrease() {
-
-    }
-
-    @Override
-    public void userlogin(String userName, String passWord) {
-    }
-
-    @Override
-    public User getUserById(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return u;
     }
 
     @Override
     public List<User> getAllUsers() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void increase(String id) {
+        try {
+            connect = DataSource.getConnection();
+            statement = connect.createStatement();
+            statement.executeUpdate(StringQuery.increase(id));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } finally {
+            DataSource.returnConnection(connect);
+        }
+    }
+
+    @Override
+    public void decrease(String id) {
+        try {
+            connect = DataSource.getConnection();
+            statement = connect.createStatement();
+            statement.executeUpdate(StringQuery.decrease(id));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } finally {
+            DataSource.returnConnection(connect);
+        }
     }
 
 }

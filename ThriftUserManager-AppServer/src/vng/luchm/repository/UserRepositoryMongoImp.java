@@ -45,12 +45,12 @@ public class UserRepositoryMongoImp implements IUserRepository {
     }
 
     @Override
-    public void increase() {
+    public void increase(String id) {
 
     }
 
     @Override
-    public void decrease() {
+    public void decrease(String id) {
 
     }
 
