@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import org.apache.log4j.Logger;
 import vng.luchm.config.StringQuery;
 import vng.luchm.pool.DataSource;
 import vng.luchm.thrift.User;
@@ -23,17 +24,20 @@ public class UserRepositoryMySQLImp implements IUserRepository {
     private Connection connect;
     private Statement statement;
     private ResultSet resultset;
-
+    private static final Logger logger = Logger.getLogger(UserRepositoryMySQLImp.class);
     @Override
     public void userRegister(User u) {
         try {
             connect = DataSource.getConnection();
             statement = connect.createStatement();
             statement.executeUpdate(StringQuery.insert(u));
+            logger.info(StringQuery.insert(u));
         } catch (SQLException ex) {
             ex.printStackTrace();
+            logger.error(StringQuery.insert(u));
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
+            logger.error(StringQuery.insert(u));
         } finally {
             DataSource.returnConnection(connect);
         }
@@ -96,10 +100,13 @@ public class UserRepositoryMySQLImp implements IUserRepository {
             connect = DataSource.getConnection();
             statement = connect.createStatement();
             statement.executeUpdate(StringQuery.increase(id));
+            logger.info(StringQuery.increase(id));
         } catch (SQLException ex) {
             ex.printStackTrace();
+            logger.error(StringQuery.increase(id));
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
+            logger.error(StringQuery.increase(id));
         } finally {
             DataSource.returnConnection(connect);
         }
@@ -111,13 +118,16 @@ public class UserRepositoryMySQLImp implements IUserRepository {
             connect = DataSource.getConnection();
             statement = connect.createStatement();
             statement.executeUpdate(StringQuery.decrease(id));
+            logger.info(StringQuery.decrease(id));
         } catch (SQLException ex) {
             ex.printStackTrace();
+            logger.error(StringQuery.decrease(id));
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
+            logger.error(StringQuery.decrease(id));
         } finally {
             DataSource.returnConnection(connect);
         }
     }
-
+    
 }

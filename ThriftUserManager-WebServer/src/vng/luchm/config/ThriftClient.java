@@ -7,7 +7,6 @@ package vng.luchm.config;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;

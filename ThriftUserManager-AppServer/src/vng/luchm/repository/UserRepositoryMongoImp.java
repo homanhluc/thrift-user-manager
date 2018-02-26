@@ -12,6 +12,7 @@ import com.mongodb.client.MongoDatabase;
 import java.util.Hashtable;
 import java.util.List;
 import org.bson.Document;
+import org.slf4j.Logger;
 import vng.luchm.config.SystemInfo;
 import vng.luchm.thrift.User;
 
@@ -27,7 +28,6 @@ public class UserRepositoryMongoImp implements IUserRepository {
 //            = mongoClient.getDatabase(SystemInfo.DB);
 //    private static final MongoCollection<Document> coll
 //            = db.getCollection("user");
-
     @Override
     public void userRegister(User userInfo) {
 //        try {

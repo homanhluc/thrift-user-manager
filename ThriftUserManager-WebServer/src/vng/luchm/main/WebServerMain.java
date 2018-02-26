@@ -21,7 +21,6 @@ public class WebServerMain {
             ThriftClient.openSocket();
             JettyServer.start();
         } catch (Exception ex) {
-            System.err.println("Loi");
             Logger.getLogger(WebServerMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

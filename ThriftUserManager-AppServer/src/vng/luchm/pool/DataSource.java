@@ -6,9 +6,7 @@
 package vng.luchm.pool;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  *
@@ -22,25 +20,6 @@ public class DataSource {
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Connection connection = pool.getConnectionFromPool();
         return connection;
-    }
-
-    public static void closeConnection(ResultSet resultset, Statement statement, Connection connect) {
-        try {
-            if (resultset != null) {
-                resultset.close();
-            }
-
-            if (statement != null) {
-                statement.close();
-            }
-
-            if (connect != null) {
-                connect.close();
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
     public static void returnConnection(Connection connection) {
         pool.returnConnectionToPool(connection);
