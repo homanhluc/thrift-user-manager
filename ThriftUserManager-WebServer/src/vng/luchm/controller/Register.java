@@ -6,7 +6,6 @@
 package vng.luchm.controller;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,24 +15,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.apache.thrift.TException;
-import vng.luchm.config.ThriftClient;
+import vng.luchm.handler.Handler;
 import vng.luchm.thrift.User;
 
 /**
  *
  * @author luchm
  */
-public class Register extends HttpServlet implements Serializable {
+public class Register extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(Register.class);
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println("{ \"status\": \"ok\"}");
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -46,7 +37,8 @@ public class Register extends HttpServlet implements Serializable {
         u.setUpdatedDate(createdDay());
 
         try {
-            ThriftClient.client.userRegister(u);
+            Handler handler = new Handler();
+            handler.register(u);
         } catch (TException ex) {
             logger.error("userRegister() - " + ex.getMessage());
         }

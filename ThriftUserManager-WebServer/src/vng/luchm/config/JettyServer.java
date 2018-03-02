@@ -10,9 +10,13 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import vng.luchm.controller.GetAllUsers;
+import vng.luchm.controller.GetUserById;
 import vng.luchm.controller.Login;
 import vng.luchm.controller.Register;
+import vng.luchm.controller.RequestTesting;
 import vng.luchm.controller.SetScore;
+import vng.luchm.log.LogConfig;
 
 /**
  *
@@ -42,7 +46,12 @@ public class JettyServer {
         servletHandler.addServletWithMapping(Register.class, "/register");
         servletHandler.addServletWithMapping(Login.class, "/login");
         servletHandler.addServletWithMapping(SetScore.class, "/score");
-
+        servletHandler.addServletWithMapping(GetAllUsers.class, "/all");
+        servletHandler.addServletWithMapping(GetUserById.class, "/user");
+        servletHandler.addServletWithMapping(RequestTesting.class, "/testing");
+        
+        new LogConfig();
+        
         server.start();
 
     }

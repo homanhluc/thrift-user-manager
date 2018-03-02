@@ -5,6 +5,7 @@
  */
 package vng.luchm.controller;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,22 +19,21 @@ import vng.luchm.handler.Handler;
  *
  * @author luchm
  */
-public class Login extends HttpServlet {
+public class GetAllUsers extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(Login.class);
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            Handler handler = new Handler();
             resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            String username = req.getHeader("username");
-            String password = req.getHeader("password");
-            handler.login(username, password);
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(new Gson().toJson(Handler.getAllUser()));
 
         } catch (TException ex) {
-            logger.error("userLogin() - " + ex.getMessage());
+            ex.printStackTrace();
+            logger.error("getAllUsers() - " + ex.getMessage());
         }
     }
+
 }
