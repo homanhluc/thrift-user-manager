@@ -20,30 +20,30 @@ import vng.luchm.thrift.UserManagerService;
  * @author luchm
  */
 public class AppServerMain {
+
     public static UserManagerServiceHandler handler;
     public static UserManagerService.Processor processor;
-    
+
     @SuppressWarnings("unchecked")
-    public static void main(String[] args) {
-        
+    public static void main(String[] args) throws ClassNotFoundException {
+
         handler = new UserManagerServiceHandler();
         processor = new UserManagerService.Processor(handler);
-        new DataSource();
+        DataSource.returnConnection(DataSource.getConnection());
         new LogConfig();
         Runnable threadServerStart = () -> {
             serverStart(processor);
         };
         new Thread(threadServerStart).start();
     }
-    
+
     public static void serverStart(UserManagerService.Processor processor) {
         try {
             final TServerTransport serverTransport = new TServerSocket(9000);
-            final TServer server = new TThreadPoolServer(new TThreadPoolServer
-                    .Args(serverTransport)
+            final TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport)
                     .processor(processor)
                     .maxWorkerThreads(1000));
-            
+
             System.out.println("Starting the thread pool server...");
             server.serve();
         } catch (TTransportException ex) {
