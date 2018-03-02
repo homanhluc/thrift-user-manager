@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import vng.luchm.config.JettyServer;
 import vng.luchm.config.ThriftClient;
+import vng.luchm.log.LogConfig;
 /**
  *
  * @author luchm
@@ -18,8 +19,10 @@ public class WebServerMain {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         try {
+            new LogConfig();
             ThriftClient.openSocket();
             JettyServer.start();
+            
         } catch (Exception ex) {
             Logger.getLogger(WebServerMain.class.getName()).log(Level.SEVERE, null, ex);
         }

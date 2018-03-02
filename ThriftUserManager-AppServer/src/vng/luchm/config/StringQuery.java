@@ -45,4 +45,9 @@ public class StringQuery {
         String query = "UPDATE usermanager.user SET Score = Score - 1 WHERE Id = " + id;
         return query;
     }
+    public static String getAll() {
+        String query = "SELECT * FROM "
+                + TABLE ;
+        return query;
+    }
 }

@@ -6,7 +6,6 @@
 package vng.luchm.pool;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  *
@@ -17,7 +16,7 @@ public class DataSource {
 
     static JDBCConnectionPool pool = new JDBCConnectionPool();
 
-    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+    public static Connection getConnection() throws ClassNotFoundException {
         Connection connection = pool.getConnectionFromPool();
         return connection;
     }

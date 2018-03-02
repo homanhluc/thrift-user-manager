@@ -12,6 +12,7 @@ import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransportException;
 import vng.luchm.handler.UserManagerServiceHandler;
 import vng.luchm.log.LogConfig;
+import vng.luchm.pool.DataSource;
 import vng.luchm.thrift.UserManagerService;
 
 /**
@@ -24,8 +25,10 @@ public class AppServerMain {
     
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
+        
         handler = new UserManagerServiceHandler();
         processor = new UserManagerService.Processor(handler);
+        new DataSource();
         new LogConfig();
         Runnable threadServerStart = () -> {
             serverStart(processor);

@@ -23,7 +23,7 @@ public class Configuration {
         DB_PASSWORD = "1995";
         DB_URL = "jdbc:mysql://localhost:3306/usermanager";
         DB_DRIVER = "com.mysql.jdbc.Driver";
-        DB_MAX_CONNECTIONS = 5;
+        DB_MAX_CONNECTIONS = 100;
     }
     
     // Cau hinh nhu Singleton

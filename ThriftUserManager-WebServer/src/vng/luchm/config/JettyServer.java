@@ -24,11 +24,12 @@ public class JettyServer {
 
     public static void start() throws Exception {
 
-        int maxThreads = 100;
+        int maxThreads = 1000;
         int minThreads = 10;
         int idleTimeout = 120;
 
-        QueuedThreadPool threadPool = new QueuedThreadPool(maxThreads, minThreads, idleTimeout);
+        QueuedThreadPool threadPool;
+        threadPool = new QueuedThreadPool(maxThreads, minThreads, idleTimeout);
 
         server = new Server(threadPool);
         ServerConnector connector = new ServerConnector(server);
