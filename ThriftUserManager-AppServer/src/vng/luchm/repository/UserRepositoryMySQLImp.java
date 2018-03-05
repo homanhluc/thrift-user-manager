@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import vng.luchm.config.StringQuery;
 import vng.luchm.pool.DataSource;
@@ -105,7 +104,7 @@ public class UserRepositoryMySQLImp implements IUserRepository {
                 u.setPassWord(resultset.getString("PassWord"));
                 u.setScore(resultset.getInt("Score"));
                 u.setCreatedDate(resultset.getString("CreatedDate"));
-                u.setUpdatedDate(resultset.getString("updatedDate"));
+                u.setUpdatedDate(resultset.getString("UpdatedDate"));
                 list.add(u);
             }
         } catch (SQLException | ClassNotFoundException ex) {

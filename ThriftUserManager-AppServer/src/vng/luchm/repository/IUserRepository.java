@@ -6,7 +6,6 @@
 package vng.luchm.repository;
 
 import java.util.List;
-import vng.luchm.thrift.Operation;
 import vng.luchm.thrift.User;
 
 /**

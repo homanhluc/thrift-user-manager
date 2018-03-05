@@ -20,23 +20,23 @@ public class Handler implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static List<User> getAllUser() throws TException {
+    public synchronized static List<User> getAllUser() throws TException {
         return ThriftClient.client.getAllUsers();
     }
 
-    public static User getUserById(String id) throws TException {
+    public synchronized static User getUserById(String id) throws TException {
         return ThriftClient.client.getUserById(id);
     }
 
-    public static void login(String userName, String passWord) throws TException {
+    public synchronized static void login(String userName, String passWord) throws TException {
         ThriftClient.client.userlogin(userName, passWord);
     }
 
-    public static void register(User u) throws TException {
+    public synchronized static void register(User u) throws TException {
         ThriftClient.client.userRegister(u);
     }
 
-    public static void setScore(Operation op, String id) throws TException {
+    public synchronized static void setScore(Operation op, String id) throws TException {
         ThriftClient.client.setScore(op, id);
     }
 }

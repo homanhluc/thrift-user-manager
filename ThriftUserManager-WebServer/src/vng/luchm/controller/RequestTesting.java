@@ -22,4 +22,7 @@ public class RequestTesting extends HttpServlet {
         super.doGet(req, resp); //To change body of generated methods, choose Tools | Templates.
     }
     
+    private void createThread() {
+        
+    }
 }

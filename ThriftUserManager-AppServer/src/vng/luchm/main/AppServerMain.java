@@ -43,7 +43,6 @@ public class AppServerMain {
             final TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport)
                     .processor(processor)
                     .maxWorkerThreads(1000));
-
             System.out.println("Starting the thread pool server...");
             server.serve();
         } catch (TTransportException ex) {
