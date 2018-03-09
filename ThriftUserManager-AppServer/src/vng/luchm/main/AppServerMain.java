@@ -12,7 +12,6 @@ import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransportException;
 import vng.luchm.handler.UserManagerServiceHandler;
 import vng.luchm.log.LogConfig;
-import vng.luchm.pool.DataSource;
 import vng.luchm.thrift.UserManagerService;
 
 /**
@@ -21,15 +20,16 @@ import vng.luchm.thrift.UserManagerService;
  */
 public class AppServerMain {
 
-    public static UserManagerServiceHandler handler;
-    public static UserManagerService.Processor processor;
+    private static UserManagerServiceHandler handler;
+    private static UserManagerService.Processor processor;
+    private static TServerTransport serverTransport;
+    private static TServer server;
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws ClassNotFoundException {
 
         handler = new UserManagerServiceHandler();
         processor = new UserManagerService.Processor(handler);
-        DataSource.returnConnection(DataSource.getConnection());
         new LogConfig();
         Runnable threadServerStart = () -> {
             serverStart(processor);
@@ -39,11 +39,14 @@ public class AppServerMain {
 
     public static void serverStart(UserManagerService.Processor processor) {
         try {
-            final TServerTransport serverTransport = new TServerSocket(9000);
-            final TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport)
+            serverTransport = new TServerSocket(9000);
+            TThreadPoolServer.Args args = new TThreadPoolServer.Args(serverTransport)
                     .processor(processor)
-                    .maxWorkerThreads(1000));
+                    .maxWorkerThreads(100)
+                    .requestTimeout(120);
+            server = new TThreadPoolServer(args);
             System.out.println("Starting the thread pool server...");
+            
             server.serve();
         } catch (TTransportException ex) {
             ex.printStackTrace();

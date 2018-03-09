@@ -14,7 +14,6 @@ import vng.luchm.controller.GetAllUsers;
 import vng.luchm.controller.GetUserById;
 import vng.luchm.controller.Login;
 import vng.luchm.controller.Register;
-import vng.luchm.controller.RequestTesting;
 import vng.luchm.controller.SetScore;
 import vng.luchm.log.LogConfig;
 
@@ -48,10 +47,8 @@ public class JettyServer {
         servletHandler.addServletWithMapping(SetScore.class, "/score");
         servletHandler.addServletWithMapping(GetAllUsers.class, "/all");
         servletHandler.addServletWithMapping(GetUserById.class, "/user");
-        servletHandler.addServletWithMapping(RequestTesting.class, "/testing");
         
         new LogConfig();
-        
         server.start();
 
     }

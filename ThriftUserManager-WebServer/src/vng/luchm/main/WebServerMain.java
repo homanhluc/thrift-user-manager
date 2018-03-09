@@ -5,8 +5,6 @@
  */
 package vng.luchm.main;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import vng.luchm.config.JettyServer;
 import vng.luchm.config.ThriftClient;
 
@@ -21,8 +19,9 @@ public class WebServerMain {
         try {
             ThriftClient.openSocket();
             JettyServer.start();
+            System.out.println("Starting the wed server...");
         } catch (Exception ex) {
-            Logger.getLogger(WebServerMain.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("WEB SERVER ERROR");
         }
     }
 }
