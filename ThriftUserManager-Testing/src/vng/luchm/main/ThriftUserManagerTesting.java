@@ -9,7 +9,8 @@ import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletHandler;
-import vng.luchm.controller.RequestStatistics;
+import vng.luchm.controller.Benchmark;
+import vng.luchm.controller.LoadTest;
 import vng.luchm.testing.TestGetAllUsers;
 /**
  *
@@ -29,9 +30,11 @@ public class ThriftUserManagerTesting {
         ServletHandler servletHandler = new ServletHandler();
         server.setHandler(servletHandler);
 
-        servletHandler.addServletWithMapping(RequestStatistics.class, "");
+        servletHandler.addServletWithMapping(Benchmark.class, "/benchmark");
+        servletHandler.addServletWithMapping(LoadTest.class, "/loadtest");
+        
         server.start();
-        TestGetAllUsers testGetAllUsers = new TestGetAllUsers();
-        testGetAllUsers.sendingGetAllUsers();
+        
+       
     }
 }

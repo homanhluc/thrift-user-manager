@@ -11,20 +11,11 @@ package vng.luchm.domain;
  */
 public class Statistics {
 
-    private String methodName;
     private int totalReq;
-    private int min;
-    private int max;
-    private double throughPut;
     private double loadTime;
-
-    public String getMethodName() {
-        return methodName;
-    }
-
-    public void setMethodName(String methodName) {
-        this.methodName = methodName;
-    }
+    private double sizeInByte;
+    private int responseCode;
+    private String responseMessage;
 
     public int getTotalReq() {
         return totalReq;
@@ -33,30 +24,7 @@ public class Statistics {
     public void setTotalReq(int totalReq) {
         this.totalReq = totalReq;
     }
-
-    public int getMin() {
-        return min;
-    }
-
-    public void setMin(int min) {
-        this.min = min;
-    }
-
-    public int getMax() {
-        return max;
-    }
-
-    public void setMax(int max) {
-        this.max = max;
-    }
-
-    public double getThroughPut() {
-        return throughPut;
-    }
-
-    public void setThroughPut(double throughPut) {
-        this.throughPut = throughPut;
-    }
+    
 
     public double getLoadTime() {
         return loadTime;
@@ -66,4 +34,28 @@ public class Statistics {
         this.loadTime = loadTime;
     }
 
+    public double getSizeInByte() {
+        return sizeInByte;
+    }
+
+    public void setSizeInByte(double sizeInByte) {
+        this.sizeInByte = sizeInByte;
+    }
+
+    public int getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
+    
 }

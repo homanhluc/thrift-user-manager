@@ -27,7 +27,6 @@ public class AppServerMain {
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws ClassNotFoundException {
-
         handler = new UserManagerServiceHandler();
         processor = new UserManagerService.Processor(handler);
         new LogConfig();
@@ -46,7 +45,7 @@ public class AppServerMain {
                     .requestTimeout(120);
             server = new TThreadPoolServer(args);
             System.out.println("Starting the thread pool server...");
-            
+
             server.serve();
         } catch (TTransportException ex) {
             ex.printStackTrace();
