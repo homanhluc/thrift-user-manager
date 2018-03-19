@@ -19,4 +19,5 @@ public interface IUserRepository {
     void userlogin(String userName, String passWord);
     User getUserById(String id);
     List<User> getAllUsers();
+    void logQuery(String query);
 }

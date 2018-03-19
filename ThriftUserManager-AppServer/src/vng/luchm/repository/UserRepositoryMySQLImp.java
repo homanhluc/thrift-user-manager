@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import vng.luchm.config.StringQuery;
+import vng.luchm.log.LogConfig;
 import vng.luchm.pool.DataSource;
 import vng.luchm.thrift.User;
 
@@ -26,7 +27,9 @@ public class UserRepositoryMySQLImp implements IUserRepository {
     private Connection connect;
     private Statement statement;
     private ResultSet resultset;
-    private static final Logger logger = Logger.getLogger(UserRepositoryMySQLImp.class);
+    private final String _SUCCESS = "SUCCESS";
+    private final String _ERROR = "ERROR";
+    //private static final Logger logger = Logger.getLogger(UserRepositoryMySQLImp.class);
 
     public UserRepositoryMySQLImp() {
         this.resultset = null;
@@ -38,9 +41,12 @@ public class UserRepositoryMySQLImp implements IUserRepository {
             connect = DataSource.getConnection();
             statement = connect.createStatement();
             statement.executeUpdate(StringQuery.insert(u));
-            logger.info(StringQuery.insert(u));
+            
+            LogConfig.saveLog(_SUCCESS, UserRepositoryMySQLImp.class.toString(), StringQuery.insert(u));
+            //logger.info(StringQuery.insert(u));
         } catch (SQLException | ClassNotFoundException ex) {
-            logger.error(StringQuery.insert(u) + " - " + ex.getMessage());
+            //logger.error(StringQuery.insert(u) + " - " + ex.getMessage());
+            LogConfig.saveLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.insert(u));
         } finally {
             DataSource.returnConnection(connect);
         }
@@ -58,7 +64,7 @@ public class UserRepositoryMySQLImp implements IUserRepository {
             }
             getUserById(u.getId());
         } catch (SQLException | ClassNotFoundException ex) {
-            logger.error(StringQuery.checkLogin(userName, passWord) + " - " + ex.getMessage());
+            LogConfig.saveLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.checkLogin(userName, passWord));
         } finally {
             DataSource.returnConnection(connect);
         }
@@ -81,7 +87,7 @@ public class UserRepositoryMySQLImp implements IUserRepository {
                 u.setUpdatedDate(resultset.getString("updatedDate"));
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            logger.error(StringQuery.getUser(id) + " - " + ex.getMessage());
+            LogConfig.saveLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.getUser(id));
         } finally {
             DataSource.returnConnection(connect);
         }
@@ -108,7 +114,7 @@ public class UserRepositoryMySQLImp implements IUserRepository {
                 list.add(u);
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            logger.error(StringQuery.getAll() + " - " + ex.getMessage());
+            LogConfig.saveLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.getAll());
         } finally {
             DataSource.returnConnection(connect);
         }
@@ -122,9 +128,9 @@ public class UserRepositoryMySQLImp implements IUserRepository {
             connect = DataSource.getConnection();
             statement = connect.createStatement();
             statement.executeUpdate(StringQuery.increase(id));
-            logger.info(StringQuery.increase(id));
+            LogConfig.saveLog(_SUCCESS, UserRepositoryMySQLImp.class.toString(), StringQuery.increase(id));
         } catch (SQLException | ClassNotFoundException ex) {
-            logger.error(StringQuery.increase(id) + " - " + ex.getMessage());
+            LogConfig.saveLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.increase(id));
         } finally {
             DataSource.returnConnection(connect);
         }
@@ -136,9 +142,22 @@ public class UserRepositoryMySQLImp implements IUserRepository {
             connect = DataSource.getConnection();
             statement = connect.createStatement();
             statement.executeUpdate(StringQuery.decrease(id));
-            logger.info(StringQuery.decrease(id));
+            LogConfig.saveLog(_SUCCESS, UserRepositoryMySQLImp.class.toString(), StringQuery.decrease(id));
         } catch (SQLException | ClassNotFoundException ex) {
-            logger.error(StringQuery.decrease(id) + " - " + ex.getMessage());
+            LogConfig.saveLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.decrease(id));
+        } finally {
+            DataSource.returnConnection(connect);
+        }
+    }
+
+    @Override
+    public void logQuery(String query) {
+        try {
+            connect = DataSource.getConnection();
+            statement = connect.createStatement();
+            statement.executeUpdate(query);
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println(ex);
         } finally {
             DataSource.returnConnection(connect);
         }

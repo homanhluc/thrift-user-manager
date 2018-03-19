@@ -29,7 +29,9 @@ public class AppServerMain {
     public static void main(String[] args) throws ClassNotFoundException {
         handler = new UserManagerServiceHandler();
         processor = new UserManagerService.Processor(handler);
-        new LogConfig();
+        
+        LogConfig lc = new LogConfig();
+        lc.readLog();
         Runnable threadServerStart = () -> {
             serverStart(processor);
         };
