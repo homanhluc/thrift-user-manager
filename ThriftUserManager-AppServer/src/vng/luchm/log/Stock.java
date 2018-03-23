@@ -6,12 +6,16 @@
 package vng.luchm.log;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
  * @author luchm
  */
-public class Stock {
+public class Stock implements Serializable{
+    
     
     private String date;
     private String time;
@@ -27,9 +31,12 @@ public class Stock {
         classlog = split[3];
         statement = split[4];
     }
-    public Stock(String date, String time, String status, String classlog, String statement) {
-        this.date = date;
-        this.time = time;
+    public Stock(String status, String classlog, String statement) {
+        DateFormat dates = new SimpleDateFormat("yyyy/MM/dd");
+        DateFormat times = new SimpleDateFormat("HH:mm:ss");
+        Date datess = new Date();
+        this.date = dates.format(datess);
+        this.time = times.format(datess);
         this.status = status;
         this.classlog = classlog;
         this.statement = statement;

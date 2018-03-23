@@ -27,7 +27,7 @@ public class JettyServer {
 
     public static void start() throws Exception {
 
-        int maxThreads = 1000;
+        int maxThreads = 200;
         int minThreads = 10;
         int idleTimeout = 120;
 

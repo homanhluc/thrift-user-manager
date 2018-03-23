@@ -42,7 +42,6 @@ public class LogConfig {
 
     private static final String _PATH_MAIN = "src/vng/luchm/log/logs/";
     private static final String _PATH_BACKUP = "src/vng/luchm/log/logs/backup/";
-    private static final int _DAY = 1;
 
     private UserRepositoryMySQLImp urmsqli = new UserRepositoryMySQLImp();
 
@@ -86,7 +85,8 @@ public class LogConfig {
             }
             // Save log
             BufferedWriter bw = new BufferedWriter(new FileWriter(f, true));
-            bw.write(stock(status, classlog, statement).toString());
+            Stock s = new Stock(status, classlog, statement);
+            bw.write(s.toString());
             bw.newLine();
             bw.flush();
             bw.close();
@@ -94,18 +94,6 @@ public class LogConfig {
             System.out.println("Loi doc file: " + ex);
         }
 
-    }
-
-    private static Stock stock(String status, String classlog, String statement) {
-        DateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-        DateFormat time = new SimpleDateFormat("HH:mm:ss");
-        Date dates = new Date();
-        Stock stocks = new Stock(date.format(dates),
-                time.format(dates),
-                status,
-                classlog,
-                statement);
-        return stocks;
     }
 
     private static String nameFileLog() {

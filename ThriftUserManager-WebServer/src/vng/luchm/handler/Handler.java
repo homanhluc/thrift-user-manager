@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import org.apache.thrift.TException;
 import vng.luchm.config.ThriftClient;
+import vng.luchm.main.WebServerMain;
 import vng.luchm.thrift.Operation;
 import vng.luchm.thrift.User;
 
@@ -25,7 +26,16 @@ public class Handler implements Serializable {
     }
 
     public synchronized static User getUserById(String id) throws TException {
-        return ThriftClient.client.getUserById(id);
+        if (WebServerMain.cache.get(Integer.parseInt(id)) != null) {
+            return (User) WebServerMain.cache.get(Integer.parseInt(id));
+        } else {
+            User user = ThriftClient.client.getUserById(id);
+            if (user.getId() != null) {
+                WebServerMain.cache.set(Integer.parseInt(id), user);
+                return user;
+            }
+            return null;
+        }
     }
 
     public synchronized static void login(String userName, String passWord) throws TException {

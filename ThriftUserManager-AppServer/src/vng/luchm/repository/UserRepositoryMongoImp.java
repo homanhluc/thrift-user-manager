@@ -7,11 +7,14 @@ package vng.luchm.repository;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Hashtable;
 import java.util.List;
-import org.bson.Document;
 import org.slf4j.Logger;
 import vng.luchm.config.SystemInfo;
 import vng.luchm.thrift.User;
@@ -23,11 +26,13 @@ import vng.luchm.thrift.User;
 public class UserRepositoryMongoImp implements IUserRepository {
 
 //    private static final MongoClient mongoClient
-//            = new MongoClient(SystemInfo.HOST, SystemInfo.PORT);
+//            = new MongoClient(SystemInfo.HOST, 2330);
 //    private static final MongoDatabase db
 //            = mongoClient.getDatabase(SystemInfo.DB);
 //    private static final MongoCollection<Document> coll
 //            = db.getCollection("user");
+//    private static final MongoClientOptions.Builder clientOptions = new MongoClientOptions.Builder();
+// 
     @Override
     public void userRegister(User userInfo) {
 //        try {

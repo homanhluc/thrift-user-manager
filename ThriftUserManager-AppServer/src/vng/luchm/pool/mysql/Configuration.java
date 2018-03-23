@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vng.luchm.pool;
+package vng.luchm.pool.mysql;
 
 /**
  *
@@ -23,6 +23,8 @@ public class Configuration {
         DB_PASSWORD = "1995";
         DB_URL = "jdbc:mysql://localhost:3306/usermanager";
         DB_DRIVER = "com.mysql.jdbc.Driver";
+//        DB_URL = "jdbc:mongo://localhost:27017/usermanager";
+//        DB_DRIVER = "mongodb.jdbc.MongoDriver";
         DB_MAX_CONNECTIONS = 100;
     }
     
