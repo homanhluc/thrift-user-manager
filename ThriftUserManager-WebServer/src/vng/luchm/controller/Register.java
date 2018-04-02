@@ -5,6 +5,7 @@
  */
 package vng.luchm.controller;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,7 +39,20 @@ public class Register extends HttpServlet {
 
         try {
             Handler handler = new Handler();
-            handler.register(u);
+            Status s = new Status();
+            if (handler.register(u) == true) {
+                s.status = true;
+                String json = new Gson().toJson(s);
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                resp.getWriter().write(json);
+            } else {
+                s.status = false;
+                String json = new Gson().toJson(s);
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                resp.getWriter().write(json);
+            }
         } catch (TException ex) {
             logger.error("userRegister() - " + ex.getMessage());
         }
@@ -48,5 +62,8 @@ public class Register extends HttpServlet {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         return dateFormat.format(date);
+    }
+    class Status {
+        boolean status;
     }
 }

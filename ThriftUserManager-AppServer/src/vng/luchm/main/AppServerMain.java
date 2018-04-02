@@ -23,6 +23,7 @@ public class AppServerMain {
     private static UserManagerService.Processor processor;
     private static TServerTransport serverTransport;
     private static TServer server;
+    
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws ClassNotFoundException {
@@ -32,6 +33,7 @@ public class AppServerMain {
             serverStart(processor);
         };
         new Thread(threadServerStart).start();
+
     }
 
     public static void serverStart(UserManagerService.Processor processor) {

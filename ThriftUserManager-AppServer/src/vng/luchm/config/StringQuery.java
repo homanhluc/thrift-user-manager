@@ -14,14 +14,25 @@ import vng.luchm.thrift.User;
 public class StringQuery {
     private static final String TABLE = "user"; 
     public static String insert(User u) {
+//        String query = "INSERT INTO "
+//                    + TABLE
+//                    +" (UserName, PassWord, Score, CreatedDate, UpdatedDate) VALUES ("
+//                    + "'" + u.getUserName() + "'" + ","
+//                    + "'" + u.getPassWord() + "'" + ","
+//                    + "'" + u.getScore() + "'" + ","
+//                    + "'" + u.getCreatedDate() + "'" + ","
+//                    + "'" + u.getUpdatedDate() + "'" + ")";
         String query = "INSERT INTO "
-                    + TABLE
-                    +" (UserName, PassWord, Score, CreatedDate, UpdatedDate) VALUES ("
-                    + "'" + u.getUserName() + "'" + ","
-                    + "'" + u.getPassWord() + "'" + ","
-                    + "'" + u.getScore() + "'" + ","
-                    + "'" + u.getCreatedDate() + "'" + ","
-                    + "'" + u.getUpdatedDate() + "'" + ")";
+                + TABLE
+                + " (UserName, PassWord, Score, CreatedDate, UpdatedDate) SELECT "
+                + "'" + u.getUserName() + "'" + ","
+                + "'" + u.getPassWord() + "'" + ","
+                + "'" + u.getScore() + "'" + ","
+                + "'" + u.getCreatedDate() + "'" + ","
+                + "'" + u.getUpdatedDate() + "'"
+                + " FROM usermanager.user "
+                + "WHERE NOT EXISTS(SELECT UserName FROM usermanager.user WHERE UserName = '"+ u.getUserName() +"')"
+                + " LIMIT 1";
         return query;
     }
     public static String checkLogin(String username, String password) {

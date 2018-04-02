@@ -34,7 +34,7 @@ public class UserRepositoryMongoImp implements IUserRepository {
 //    private static final MongoClientOptions.Builder clientOptions = new MongoClientOptions.Builder();
 // 
     @Override
-    public void userRegister(User userInfo) {
+    public boolean userRegister(User userInfo) {
 //        try {
 //            User user = new User();
 //            Hashtable ht = new Hashtable();
@@ -47,6 +47,7 @@ public class UserRepositoryMongoImp implements IUserRepository {
 //            System.err.println(e.getClass().getName() + ": " + e.getMessage());
 //            e.printStackTrace();
 //        }
+        return true;
     }
 
     @Override
@@ -60,7 +61,8 @@ public class UserRepositoryMongoImp implements IUserRepository {
     }
 
     @Override
-    public void userlogin(String userName, String passWord) {
+    public boolean userlogin(String userName, String passWord) {
+        return true;
     }
 
     @Override

@@ -20,6 +20,8 @@ import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import vng.luchm.repository.UserRepositoryMySQLImp;
 
 /**
@@ -39,12 +41,15 @@ public class LogBinary {
 
     private static FileInputStream fis = null;
     private static ObjectInputStream ois = null;
-    public static void main(String[] args) {
-        readLog();
-    }
-    public static void writeLog(String status, String classlog, String statement) {
+
+    //private static List<Stock> logList = new LinkedList();
+    public static void writeLog(String status, String classlog, String statement, String id) {
         try {
             f = new File(_PATH_MAIN + nameFileLog());
+//            if (!f.exists()) {
+//                File fp = new File(_PATH_MAIN + nameFileLogPrev());
+//                readLog(fp);
+//            }
             //Backup file neu >= 1MB
             if (f.length() >= 1048576) {
                 try {
@@ -56,43 +61,50 @@ public class LogBinary {
                     System.out.println(ex);
                 }
             }
-            
+
+            Stock stock = new Stock(status, classlog, statement, id);
             fos = new FileOutputStream(f, true);
             oos = new ObjectOutputStream(fos);
-            Stock stock = new Stock(status, classlog, statement);
             oos.writeObject(stock);
             oos.flush();
-            
             oos.close();
             fos.close();
+            //logList.add(stock);
+
+//            if (logList.size() == 10) {
+//
+//                for (Stock s : logList) {
+//                    
+//                }
+//                logList = new LinkedList();
+//            }
         } catch (FileNotFoundException ex) {
             System.out.println(ex);
         } catch (IOException ex) {
             System.out.println(ex);
         }
     }
+
     public static void readLog() {
         try {
             f = new File(_PATH_MAIN + nameFileLog());
-            if (!f.exists()) {
-                try {
-                    f.createNewFile();
-                } catch (IOException ex) {
-                    System.out.println(ex);
-                }
-            }
 
             fis = new FileInputStream(f);
             Stock stock;
-            boolean err = false;
+            HashMap<String, Stock> hm = new HashMap();
+            
             while (true) {
                 try {
                     ois = new ObjectInputStream(fis);
                     stock = (Stock) ois.readObject();
                     System.out.println(stock.toString());
-                    if (stock.getStatus().equals("ERROR")) {
-                        urmsqli.logQuery(stock.getStatement());
-                        err = true;
+                    if (stock.getStatus().equals("WARNING")) {
+                        hm.put(stock.getId(), stock);
+                    }
+                    if (stock.getStatus().equals("SUCCESS")) {
+                        if (hm.get(stock.getId()) != null) {
+                            hm.remove(stock.getId());
+                        }
                     }
                 } catch (EOFException ex) {
                     break;
@@ -104,8 +116,12 @@ public class LogBinary {
                     break;
                 }
             }
-            if (err == true) {
-                f.delete();
+            if (hm.size() > 0) {
+                for (Map.Entry<String, Stock> entry : hm.entrySet()) {
+                    urmsqli.logQuery(entry.getValue().getStatement());
+                    writeLog("SUCCESS", LogBinary.class.toString(), entry.getValue().getStatement(), entry.getValue().getId());
+                    System.out.println("Update done!");
+                }
             }
             ois.close();
             fis.close();
@@ -120,5 +136,16 @@ public class LogBinary {
         DateFormat date = new SimpleDateFormat("yyyyMMdd");
         Date dates = new Date();
         return date.format(dates) + ".bat";
+    }
+
+    private static String nameFileLogPrev() {
+        DateFormat date = new SimpleDateFormat("yyyyMMdd");
+        Date dates = new Date();
+        dates.setDate(dates.getDate() - 1);
+        return date.format(dates) + ".bat";
+    }
+
+    public static void main(String[] args) {
+        readLog();
     }
 }

@@ -22,16 +22,17 @@ public class Stock implements Serializable{
     private String status;
     private String classlog;
     private String statement;
+    private String id;
 
-    public Stock(String line){
-        String[] split = line.split("::");
-        date = split[0];
-        time = split[1];
-        status = split[2];
-        classlog = split[3];
-        statement = split[4];
-    }
-    public Stock(String status, String classlog, String statement) {
+//    public Stock(String line){
+//        String[] split = line.split("::");
+//        date = split[0];
+//        time = split[1];
+//        status = split[2];
+//        classlog = split[3];
+//        statement = split[4];
+//    }
+    public Stock(String status, String classlog, String statement, String id) {
         DateFormat dates = new SimpleDateFormat("yyyy/MM/dd");
         DateFormat times = new SimpleDateFormat("HH:mm:ss");
         Date datess = new Date();
@@ -40,6 +41,7 @@ public class Stock implements Serializable{
         this.status = status;
         this.classlog = classlog;
         this.statement = statement;
+        this.id = id;
     }
 
     public String getDate() {
@@ -84,6 +86,14 @@ public class Stock implements Serializable{
 
     @Override
     public String toString() {
-        return date + "::" + time + "::" + status + "::" + classlog + "::" + statement;
+        return date + "::" + time + "::" + status + "::" + classlog + "::" + statement + "::" + id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -30,6 +30,7 @@ public class UserRepositoryMySQLImp implements IUserRepository {
     private Connection connect;
     private Statement statement;
     private ResultSet resultset;
+    private final String _WARNING = "WARNING";
     private final String _SUCCESS = "SUCCESS";
     private final String _ERROR = "ERROR";
     //private static final Logger logger = Logger.getLogger(UserRepositoryMySQLImp.class);
@@ -39,36 +40,52 @@ public class UserRepositoryMySQLImp implements IUserRepository {
     }
 
     @Override
-    public void userRegister(User u) {
+    public boolean userRegister(User u) {
         try {
-            connect = DataSource.getConnection();
-            statement = connect.createStatement();
-            statement.executeUpdate(StringQuery.insert(u));
+            if (u.getUserName() != null && u.getPassWord() != null && u.getUserName().matches("[^a-zA-Z0-9 ]")) {
+                LogBinary.writeLog(_WARNING, UserRepositoryMySQLImp.class.toString(), StringQuery.insert(u), u.Id);
+                connect = DataSource.getConnection();
+                statement = connect.createStatement();
+                int a = statement.executeUpdate(StringQuery.insert(u));
 
-            LogBinary.writeLog(_SUCCESS, UserRepositoryMySQLImp.class.toString(), StringQuery.insert(u));
+                if (a == 1) {
+                    LogBinary.writeLog(_SUCCESS, UserRepositoryMySQLImp.class.toString(), StringQuery.insert(u), u.Id);
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         } catch (SQLException | ClassNotFoundException ex) {
-            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.insert(u));
+            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.insert(u), u.Id);
         } finally {
             DataSource.returnConnection(connect);
         }
+        return false;
     }
 
     @Override
-    public void userlogin(String userName, String passWord) {
+    public boolean userlogin(String userName, String passWord) {
         try {
             User u = new User();
             connect = DataSource.getConnection();
             statement = connect.createStatement();
             resultset = statement.executeQuery(StringQuery.checkLogin(userName, passWord));
+
             while (resultset.next()) {
                 u.setId(resultset.getString("Id"));
             }
-            getUserById(u.getId());
+            if (u.getId() != null) {
+                return true;
+            }
+
         } catch (SQLException | ClassNotFoundException ex) {
-            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.checkLogin(userName, passWord));
+            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.checkLogin(userName, passWord), null);
         } finally {
             DataSource.returnConnection(connect);
         }
+        return false;
     }
 
     @Override
@@ -88,7 +105,7 @@ public class UserRepositoryMySQLImp implements IUserRepository {
                 u.setUpdatedDate(resultset.getString("updatedDate"));
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.getUser(id));
+            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.getUser(id), id);
         } finally {
             DataSource.returnConnection(connect);
         }
@@ -115,7 +132,7 @@ public class UserRepositoryMySQLImp implements IUserRepository {
                 list.add(u);
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.getAll());
+            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.getAll(), null);
         } finally {
             DataSource.returnConnection(connect);
         }
@@ -126,12 +143,13 @@ public class UserRepositoryMySQLImp implements IUserRepository {
     @Override
     public void increase(String id) {
         try {
+            LogBinary.writeLog(_WARNING, UserRepositoryMySQLImp.class.toString(), StringQuery.increase(id), id);
             connect = DataSource.getConnection();
             statement = connect.createStatement();
             statement.executeUpdate(StringQuery.increase(id));
-            LogBinary.writeLog(_SUCCESS, UserRepositoryMySQLImp.class.toString(), StringQuery.increase(id));
+            LogBinary.writeLog(_SUCCESS, UserRepositoryMySQLImp.class.toString(), StringQuery.increase(id), id);
         } catch (SQLException | ClassNotFoundException ex) {
-            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.increase(id));
+            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.increase(id), id);
         } finally {
             DataSource.returnConnection(connect);
         }
@@ -140,12 +158,13 @@ public class UserRepositoryMySQLImp implements IUserRepository {
     @Override
     public void decrease(String id) {
         try {
+            LogBinary.writeLog(_WARNING, UserRepositoryMySQLImp.class.toString(), StringQuery.decrease(id), id);
             connect = DataSource.getConnection();
             statement = connect.createStatement();
             statement.executeUpdate(StringQuery.decrease(id));
-            LogBinary.writeLog(_SUCCESS, UserRepositoryMySQLImp.class.toString(), StringQuery.decrease(id));
+            LogBinary.writeLog(_SUCCESS, UserRepositoryMySQLImp.class.toString(), StringQuery.decrease(id), id);
         } catch (SQLException | ClassNotFoundException ex) {
-            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.decrease(id));
+            LogBinary.writeLog(_ERROR, UserRepositoryMySQLImp.class.toString(), StringQuery.decrease(id), id);
         } finally {
             DataSource.returnConnection(connect);
         }

@@ -7,14 +7,10 @@ package vng.luchm.handler;
 
 import java.util.List;
 import org.apache.thrift.TException;
-import vng.luchm.repository.IUserRepository;
 import vng.luchm.repository.UserRepositoryMySQLImp;
-import vng.luchm.thrift.LoginFailed;
 import vng.luchm.thrift.Operation;
-import vng.luchm.thrift.RegisterFailed;
 import vng.luchm.thrift.User;
 import vng.luchm.thrift.UserManagerService;
-import vng.luchm.thrift.UserNotFound;
 
 /**
  *
@@ -37,13 +33,13 @@ public class UserManagerServiceHandler implements UserManagerService.Iface {
     }
 
     @Override
-    public void userRegister(User userInfo) throws RegisterFailed, TException {
-        uri.userRegister(userInfo);
+    public boolean userRegister(User userInfo) throws TException {
+        return uri.userRegister(userInfo);
     }
 
     @Override
-    public void userlogin(String userName, String passWord) throws LoginFailed, TException {
-        uri.userlogin(userName, passWord);
+    public boolean userlogin(String userName, String passWord) throws TException {
+        return uri.userlogin(userName, passWord);
     }
 
     @Override
@@ -52,7 +48,7 @@ public class UserManagerServiceHandler implements UserManagerService.Iface {
     }
 
     @Override
-    public User getUserById(String id) throws UserNotFound, TException {
+    public User getUserById(String id) throws TException {
         return uri.getUserById(id);
     }
     

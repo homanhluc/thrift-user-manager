@@ -26,6 +26,7 @@ public class LoadTest extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         
         TestGetAllUsers testGetAllUsers = new TestGetAllUsers();
+        
         testGetAllUsers.sendingGetAllUsers1000();
 
         resp.setContentType("text/html; charset=utf-8");

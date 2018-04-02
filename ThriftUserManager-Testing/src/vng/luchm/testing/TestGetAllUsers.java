@@ -5,10 +5,12 @@
  */
 package vng.luchm.testing;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -28,40 +30,78 @@ public class TestGetAllUsers {
 
     private final int size = 1000;
     private final String USER_AGENT = "Mozilla/5.0";
-    public static Statistics s = new Statistics();
+    public static Statistics get = new Statistics();
+    public static Statistics post = new Statistics();
     public static List<Statistics> listStatisticses = new ArrayList();
     public static double min = 0;
     public static double max = 0;
     public static double through = 0;
 
     private Statistics openConnection() throws MalformedURLException, IOException {
-        URL url = new URL("http://localhost:9001/all");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        URL url = new URL("http://localhost:9001/user?id=1");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-        con.setRequestMethod("GET");
-        con.setRequestProperty("User-Agent", USER_AGENT);
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("User-Agent", USER_AGENT);
+
         long starTime = System.currentTimeMillis();
-        con.getInputStream();
+        conn.getInputStream();
         long endTime = System.currentTimeMillis();
-        con.disconnect();
+        conn.disconnect();
 
         Statistics s = new Statistics();
         s.setLoadTime(endTime - starTime);
-        s.setResponseCode(con.getResponseCode());
-        s.setResponseMessage(con.getResponseMessage());
-        s.setSizeInByte(con.getContentLengthLong());
+        s.setResponseCode(conn.getResponseCode());
+        s.setResponseMessage(conn.getResponseMessage());
+        s.setSizeInByte(conn.getContentLengthLong());
+
+        return s;
+    }
+
+    private Statistics openConnectionPost() throws MalformedURLException, IOException {
+        String urlParameters = "id=3&set=in";
+        byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
+        int postDataLength = postData.length;
+        String request = "http://localhost:9001/score";
+        URL url = new URL(request);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setDoOutput(true);
+        conn.setInstanceFollowRedirects(false);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        conn.setRequestProperty("charset", "utf-8");
+        conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
+        conn.setUseCaches(false);
+
+        long starTime = System.currentTimeMillis();
+        try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
+            wr.write(postData);
+        }
+        long endTime = System.currentTimeMillis();
+        conn.disconnect();
+
+        Statistics s = new Statistics();
+        s.setLoadTime(endTime - starTime);
+        s.setResponseCode(conn.getResponseCode());
+        s.setResponseMessage(conn.getResponseMessage());
+        s.setSizeInByte(conn.getContentLengthLong());
 
         return s;
     }
 
     public void sendingGetAllUsers() throws IOException {
-
         Statistics o = openConnection();
-        s.setLoadTime(o.getLoadTime());
-        s.setResponseCode(o.getResponseCode());
-        s.setSizeInByte(o.getSizeInByte());
-        s.setResponseMessage(o.getResponseMessage());
-
+        get.setLoadTime(o.getLoadTime());
+        get.setResponseCode(o.getResponseCode());
+        get.setSizeInByte(o.getSizeInByte());
+        get.setResponseMessage(o.getResponseMessage());
+    }
+    public void sendingPostUsers() throws IOException {
+        Statistics o = openConnectionPost();
+        post.setLoadTime(o.getLoadTime());
+        post.setResponseCode(o.getResponseCode());
+        post.setSizeInByte(o.getSizeInByte());
+        post.setResponseMessage(o.getResponseMessage());
     }
 
     public void sendingGetAllUsers1000() {

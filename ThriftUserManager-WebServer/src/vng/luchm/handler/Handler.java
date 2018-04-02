@@ -36,14 +36,15 @@ public class Handler implements Serializable {
             }
             return null;
         }
+        
     }
 
-    public synchronized static void login(String userName, String passWord) throws TException {
-        ThriftClient.client.userlogin(userName, passWord);
+    public synchronized static boolean login(String userName, String passWord) throws TException {
+        return ThriftClient.client.userlogin(userName, passWord);
     }
 
-    public synchronized static void register(User u) throws TException {
-        ThriftClient.client.userRegister(u);
+    public synchronized static boolean register(User u) throws TException {
+        return ThriftClient.client.userRegister(u);
     }
 
     public synchronized static void setScore(Operation op, String id) throws TException {

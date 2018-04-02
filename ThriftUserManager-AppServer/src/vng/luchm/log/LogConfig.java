@@ -40,65 +40,65 @@ public class LogConfig {
 //         PropertyConfigurator.configure(p);
 //    }
 
-    private static final String _PATH_MAIN = "src/vng/luchm/log/logs/";
-    private static final String _PATH_BACKUP = "src/vng/luchm/log/logs/backup/";
-
-    private UserRepositoryMySQLImp urmsqli = new UserRepositoryMySQLImp();
-
-    public void readLog() {
-        try {
-
-            File f = new File(_PATH_MAIN, nameFileLog());
-            if (!f.exists()) {
-                f.createNewFile();
-            }
-            BufferedReader br = new BufferedReader(new FileReader(f));
-            String line;
-            boolean err = false;
-            while ((line = br.readLine()) != null) {
-                Stock s = new Stock(line);
-                if (s.getStatus().equals("ERROR")) {
-                    urmsqli.logQuery(s.getStatement());
-                    System.out.println("[FIXED]");
-                    err = true;
-                }
-            }
-            if (err == true) {
-                f.delete();
-            }
-            br.close();
-        } catch (Exception ex) {
-            System.out.println("Loi doc file: " + ex);
-        }
-    }
-
-    public static void saveLog(String status, String classlog, String statement) {
-
-        try {
-            File f = new File(_PATH_MAIN, nameFileLog());
-            //Backup file neu >= 1MB
-            if (f.length() >= 1048576) {
-                Path source = Paths.get(_PATH_MAIN);
-                Path destination = Paths.get(_PATH_BACKUP);
-                Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-                f.delete();
-            }
-            // Save log
-            BufferedWriter bw = new BufferedWriter(new FileWriter(f, true));
-            Stock s = new Stock(status, classlog, statement);
-            bw.write(s.toString());
-            bw.newLine();
-            bw.flush();
-            bw.close();
-        } catch (IOException ex) {
-            System.out.println("Loi doc file: " + ex);
-        }
-
-    }
-
-    private static String nameFileLog() {
-        DateFormat date = new SimpleDateFormat("yyyyMMdd");
-        Date dates = new Date();
-        return date.format(dates) + ".bat";
-    }
+//    private static final String _PATH_MAIN = "src/vng/luchm/log/logs/";
+//    private static final String _PATH_BACKUP = "src/vng/luchm/log/logs/backup/";
+//
+//    private UserRepositoryMySQLImp urmsqli = new UserRepositoryMySQLImp();
+//
+//    public void readLog() {
+//        try {
+//
+//            File f = new File(_PATH_MAIN, nameFileLog());
+//            if (!f.exists()) {
+//                f.createNewFile();
+//            }
+//            BufferedReader br = new BufferedReader(new FileReader(f));
+//            String line;
+//            boolean err = false;
+////            while ((line = br.readLine()) != null) {
+////                //Stock s = new Stock(line);
+////                if (s.getStatus().equals("ERROR")) {
+////                    urmsqli.logQuery(s.getStatement());
+////                    System.out.println("[FIXED]");
+////                    err = true;
+////                }
+////            }
+//            if (err == true) {
+//                f.delete();
+//            }
+//            br.close();
+//        } catch (Exception ex) {
+//            System.out.println("Loi doc file: " + ex);
+//        }
+//    }
+//
+//    public static void saveLog(String status, String classlog, String statement) {
+//
+//        try {
+//            File f = new File(_PATH_MAIN, nameFileLog());
+//            //Backup file neu >= 1MB
+//            if (f.length() >= 1048576) {
+//                Path source = Paths.get(_PATH_MAIN);
+//                Path destination = Paths.get(_PATH_BACKUP);
+//                Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+//                f.delete();
+//            }
+//            // Save log
+//            BufferedWriter bw = new BufferedWriter(new FileWriter(f, true));
+//            Stock s = new Stock(status, classlog, statement);
+//            bw.write(s.toString());
+//            bw.newLine();
+//            bw.flush();
+//            bw.close();
+//        } catch (IOException ex) {
+//            System.out.println("Loi doc file: " + ex);
+//        }
+//
+//    }
+//
+//    private static String nameFileLog() {
+//        DateFormat date = new SimpleDateFormat("yyyyMMdd");
+//        Date dates = new Date();
+//        return date.format(dates) + ".bat";
+//    }
 }

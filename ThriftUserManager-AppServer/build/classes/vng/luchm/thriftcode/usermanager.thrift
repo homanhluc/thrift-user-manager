@@ -11,21 +11,12 @@ struct User {
     5: string CreatedDate,
     6: string UpdatedDate
 }
-exception UserNotFound {
-  1: string message
-}
-exception RegisterFailed {
-  1: string message
-}
-exception LoginFailed {
-  1: string message
-}
 service UserManagerService {
     void setScore(1:Operation op, 2:string id),
-    void userRegister(1:User userInfo) throws (1: RegisterFailed rf),
-    void userlogin(1:string userName, 2:string passWord) throws (1: LoginFailed lf),
+    bool userRegister(1:User userInfo),
+    bool userlogin(1:string userName, 2:string passWord),
     list<User> getAllUsers(),
-    User getUserById(1:string id) throws (1: UserNotFound unf)
+    User getUserById(1:string id)
 }
 
 
